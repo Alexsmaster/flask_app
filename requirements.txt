@@ -47,3 +47,6 @@ WTForms==2.3.3
 # requirements for Heroku
 #psycopg2==2.9.1
 #gunicorn==20.1.0
+
+# requirements for drawing
+plotly~=5.17.0
