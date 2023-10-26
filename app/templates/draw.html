@@ -1,12 +1,22 @@
+
+<!--
 <!DOCTYPE html>
 <html>
 <head>
     <title>Scatter Plot</title>
-    <!-- Подключите необходимые стили Plotly -->
+
     <link rel="stylesheet" href="https://cdn.plot.ly/plotly-latest.min.css">
 </head>
 <body>
-    <!-- Вставьте точечную диаграмму сюда -->
+
     {{ plot_div | safe }}
 </body>
 </html>
+-->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+{{ plot_div | safe }}
+{% endblock %}

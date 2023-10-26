@@ -13,3 +13,6 @@ class LoginForm(FlaskForm):
 class AddDotsForm(FlaskForm):
     numb = StringField('NumbOfNewDots', validators=[DataRequired()])
     submit = SubmitField('Add')
+
+class DropDots(FlaskForm):
+    submit = SubmitField('Are U shure')

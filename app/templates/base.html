@@ -12,7 +12,9 @@
             Microblog:
             <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('login') }}">Login</a>
-            <a href="{{ url_for('add_new_dots') }}">add_new_dots</a>
+            <a href="{{ url_for('add_new_dots') }}">Add new dots</a>
+            <a href="{{ url_for('drop_dots') }}">Drop db</a>
+            <a href="{{ url_for('draw') }}">Draw</a>
         </div>
         <hr>
         {% with messages = get_flashed_messages() %}

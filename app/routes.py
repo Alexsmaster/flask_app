@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for
 from app import app
-from app.forms import LoginForm, AddDotsForm
+from app.forms import LoginForm, AddDotsForm, DropDots
 from app.models import Dots, db
 
 
@@ -12,7 +12,7 @@ import random
 @app.route('/')
 @app.route('/index')
 def index():
-    user = {'username': 'Miguel'}
+    user = {'username': 'Alex'}
     posts = [
         {
             'author': {'username': 'John'},
@@ -42,7 +42,7 @@ def add_new_dots():
     if form.validate_on_submit():
         #flash('Login requested for user {}, remember_me={}'.format(
         #    form.username.data, form.remember_me.data))
-        for _ in range(1000):
+        for _ in range(int(form.numb.data)):
             point = Dots(x=random.uniform(0, 1000), y=random.uniform(0, 1000))
             db.session.add(point)
         db.session.commit()
@@ -59,4 +59,15 @@ def draw():
     fig = px.scatter(data, x='x', y='y', title='Scatter Plot')
     plot_div = fig.to_html(full_html=False)
     #fig = px.scatter(x=[point.x for point in points], y=[point.y for point in points])
+    #print(plot_div)
     return render_template('draw.html', plot_div=plot_div)
+
+
+@app.route('/drop_dots', methods=['GET', 'POST'])
+def drop_dots():
+    form = DropDots()
+    if form.validate_on_submit():
+        Dots.query.delete()
+        db.session.commit()
+        return redirect(url_for('draw'))
+    return render_template('dropdb.html',  title='DropDB', form=form)
