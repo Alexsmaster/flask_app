@@ -49,25 +49,21 @@ def add_new_dots():
         return redirect(url_for('draw'))
     return render_template('create_dots.html',  title='Add', form=form)
 
-@app.route('/draw', methods=['GET', 'POST'])
+@app.route('/draw')
 def draw():
+    return render_template('draw_dots.html')
+
+@app.route('/draw/data_request', methods=['GET', 'POST'])
+def draw_data_request():
     points = Dots.query.all()
     data = {
         'x': [point.x for point in points],
         'y': [point.y for point in points]
     }
-    # app.logger.warning('testing warning log')
-    # app.logger.error('testing error log')
-
-    fig = px.scatter(data, x='x', y='y', title='Scatter Plot')
-    #f = open("demofile3.txt", "w")
-
-    plot_div = fig.to_html(full_html=False, div_id='plot_div')
-    #f.write(plot_div)
-    #f.close()
-    #fig = px.scatter(x=[point.x for point in points], y=[point.y for point in points])
-    #print(plot_div)
     return render_template('draw_dots.html', plot_div=plot_div)
+
+
+
 
 @app.route('/click_handler', methods=['GET', 'POST'])
 def click_handler():

@@ -19,6 +19,7 @@
 {% block content %}
 
 {{ plot_div | safe }}
+ <div id="plot_div"></div>
  <script src="{{url_for('static', filename='plotly-2.27.0.min.js')}}"></script>
  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
  <script src="{{url_for('static', filename='draw_script.js')}}"></script>
