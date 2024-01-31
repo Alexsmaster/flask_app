@@ -1,0 +1,30 @@
+
+<!--
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scatter Plot</title>
+
+    <link rel="stylesheet" href="https://cdn.plot.ly/plotly-latest.min.css">
+</head>
+<body>
+
+    {{ plot_div | safe }}
+</body>
+</html>
+-->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div id='myDiv'></div>
+<div id='myPlotDiv'></div>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<!--
+<script src="{{url_for('static', filename='plotly-2.27.0.min.js')}}" charset="utf-8"></script>
+-->
+<script src="{{url_for('static', filename='draw_plotly.js')}}"></script>
+
+
+{% endblock %}
