@@ -53,6 +53,7 @@ def add_new_dots():
 def draw():
     return render_template('draw_dots.html')
 
+
 @app.route('/draw/data_request', methods=['GET', 'POST'])
 def draw_data_request():
     points = Dots.query.all()
@@ -60,7 +61,8 @@ def draw_data_request():
         'x': [point.x for point in points],
         'y': [point.y for point in points]
     }
-    return render_template('draw_dots.html', plot_div=plot_div)
+    return jsonify({'points': data})
+
 
 
 
