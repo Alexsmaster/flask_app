@@ -20,7 +20,7 @@ myPlot.on('plotly_click', function(data){
     pn = data.points[i].pointNumber;
     tn = data.points[i].curveNumber;
     colors = data.points[i].data.marker.color;
-    colors = data.points[i].data.;
+    colors = data.points[i].data;
   };
   colors[pn] = '#C54C82';
 
