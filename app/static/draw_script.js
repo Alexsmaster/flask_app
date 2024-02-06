@@ -9,20 +9,32 @@ var trace1 = {
       y: [],
       type: 'scatter',
       mode: 'markers',
-      marker: {color: 'rgba(120, 20, 130, .7)', size: 4}
+      marker: {color: 'rgba(120, 20, 130, 1)', size: 8},
+      selected: {
+        marker: {
+          color: '#ff0000',
+          opacity: 0.8
+        }
+      },
+      // unselected: {
+      //   marker: {
+      //     color: '#00ff00',
+      //     opacity: 0.5
+      //   }
+      // }
 
 };
 
 var trace2 = {
-  x: [2, 3, 4, 5],
-  y: [16, 5, 11, 9],
+  x: [203, 304, 456, 564],
+  y: [169, 576, 118, 900],
   mode: 'markers',
   type: 'scatter'
 };
 
 var trace3 = {
-  x: [1, 2, 3, 4],
-  y: [12, 9, 15, 12],
+  x: [123, 243, 311, 474],
+  y: [125, 986, 155, 129],
   mode: 'lines+markers',
   type: 'scatter'
 };
@@ -33,20 +45,30 @@ var layout = {
   hovermode:'closest',
   font: {size: 19},
   clickmode: 'select',
-  activeselection: {
-    fillcolor: "rgba(0,255,255,0)"
+  selected: {
+    marker: {
+      color: '#ff0000',
+      opacity: 0.8
+    }
   },
-  showlegend: true
+  // activeselection: {
+  //   fillcolor: "rgba(0,255,255,0)"
+  // },
+  // showlegend: true,
+  // autosize: true,
+  height: 700,
+  width: 700
+  
 };
 
 var config = {
-  toImageButtonOptions: {
-    format: 'svg', // one of png, svg, jpeg, webp
-    filename: 'custom_image',
-    height: 500,
-    width: 700,
-    scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
-  },
+  // toImageButtonOptions: {
+  //   format: 'svg', // one of png, svg, jpeg, webp
+  //   filename: 'custom_image',
+  //   height: 900,
+  //   width: 700,
+  //   scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
+  // },
 
   modeBarButtonsToAdd: [
     {
@@ -70,7 +92,9 @@ var config = {
   modeBarButtonsToRemove: ['pan2d','select2d','lasso2d','resetScale2d','zoomOut2d'],
   displayModeBar: true,
   scrollZoom: true,
-  responsive: true
+  responsive: true,
+  aspectratio: 1,
+  baseratio:1
 //  ,
 //  ,
 //  ,
@@ -79,7 +103,7 @@ var config = {
 
 
 
-var data = [trace1, trace2];
+var data = [trace1, trace2,trace3];
 
 
 console.log('P3', trace1);
@@ -102,3 +126,9 @@ $.get("/draw/data_request", (data1, status) => {
 
 var myPlot = document.getElementById('plot_div');
 
+myPlot.on('plotly_doubleclick', function(data){
+  var orgColors = ['#00000','#00000','#00000',
+                   '#00000','#00000','#00000'];
+  var update = {'marker':{color: orgColors, size:16}};
+  Plotly.restyle('myDiv', update);
+});

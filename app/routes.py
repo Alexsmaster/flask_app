@@ -40,10 +40,9 @@ def login():
 def add_new_dots():
     form = AddDotsForm()
     if form.validate_on_submit():
-        #flash('Login requested for user {}, remember_me={}'.format(
-        #    form.username.data, form.remember_me.data))
         for _ in range(int(form.numb.data)):
-            point = Dots(x=random.uniform(0, 1000), y=random.uniform(0, 1000))
+            point = Dots(x=random.randint(0, 1000), y=random.randint(0, 1000))
+
             db.session.add(point)
         db.session.commit()
         return redirect(url_for('draw'))
