@@ -63,6 +63,12 @@ def draw_data_request():
     return jsonify({'points': data})
 
 
+@app.route('/api/push_points', methods=['POST'])
+def push_points():
+    content = request.json
+    print(content)
+    return jsonify(content)
+
 
 
 
