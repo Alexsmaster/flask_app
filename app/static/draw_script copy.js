@@ -325,11 +325,7 @@ var deselectButton = document.getElementById('deselectButton');
 
 deselectButton.addEventListener('click', function() {
   // Сбросьте выделение на графике
-  
-  // layout['selectedpoints'] =  null;
-  layout['dragmode'] =  'box';
-  
-  Plotly.restyle(myPlot, data, layout, config);
+  Plotly.restyle(myPlot, 'selectedpoints', null);
   Plotly.relayout(myPlot, {
     'xaxis.autorange': true,
     'yaxis.autorange': true

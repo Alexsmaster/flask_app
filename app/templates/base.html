@@ -1,32 +1,21 @@
 <!doctype html>
-<html>
+<html style="height: 100%">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
         {% if title %}
-        <title>{{ title }} - Microblog</title>
+        <title>{{ title }} - Visualisation</title>
         {% else %}
-        <title>Welcome to Microblog</title>
+        <title>Welcome to Visualisation</title>
         {% endif %}
     </head>
-    <body>
+    <body style="height: 100%">
         <div>
-            Microblog:
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('login') }}">Login</a>
+            Visualisation:
             <a href="{{ url_for('add_new_dots') }}">Add new dots</a>
             <a href="{{ url_for('drop_dots') }}">Drop db</a>
             <a href="{{ url_for('draw') }}">Draw</a>
-            <a href="{{ url_for('drawtest') }}">Draw_test</a>
         </div>
-        <hr>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
         {% block content %}{% endblock %}
     </body>
 </html>
