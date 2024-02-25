@@ -11,18 +11,6 @@ var trace1 = {
       type: 'scatter',
       mode: 'markers',
       marker: {color: [], size: 10}, //'rgba(250, 20, 130, 1)'
-      // selected: {
-      //   marker: {
-      //     color: '#ff0000',
-      //     opacity: 1
-      //   }
-      // },
-      // unselected: {
-      //   marker: {
-      //     color: '#666622',
-      //     opacity: 1
-      //   }
-      // }
 
 };
 
@@ -36,7 +24,7 @@ var layout_stock = {
   // activeselection: {
   //   fillcolor: "rgba(0,255,255,0.2)"
   // },
-  // showlegend: true,
+  showlegend: true,
   // autosize: true,
   // height: 700,
   // width: 700
@@ -49,7 +37,7 @@ var layout = {
   title: 'Responsive to window\'s size!',
   hovermode:'closest',
   font: {size: 19},
-  
+  selected: [1,2,3,4,5,6,7,8,9,10],
 
   // activeselection: {
   //   fillcolor: "rgba(0,255,255,0.2)"
@@ -74,9 +62,10 @@ var config = {
   //   width: 700,
   //   scale: 1 // Multiply title/legend/axis/canvas sizes by this factor
   // },
-  uirevision:true,
+//  uirevision:true,
 
   modeBarButtonsToAdd: [
+    'tooglehover',
     'eraseshape',
     'resetScale2d',
     {
@@ -123,7 +112,13 @@ var config = {
           data : JSON.stringify(pointsFiltered),
           contentType: "application/json",
         }).then(function(){
-          //  pointsFiltered = [];
+            $.get("/draw/data_request", (data1, status) => {
+            trace1.x = data1.points.x;
+            trace1.y = data1.points.y;
+            trace1.marker.color = data1.points.color;
+            //  console.log(data1.points.color);
+            Plotly.react('plot_div', data, layout, config);
+            });
           
 
         });     
@@ -160,13 +155,13 @@ var myPlot = document.getElementById('plot_div');
 
   //   console.log('plotly_selected',eventData);
   //   selectedPoints = eventData.points;
-    
+
   //   const pointsFiltered = selectedPoints.map((item) => {
   //     return { x: item.x, y: item.y ,color: item["marker.color"]}
   //   })
   //   // var myPlot_temp = document.getElementById('plot_div');
   //   console.log('pointsFiltered: ',pointsFiltered);
-    
+
   //   // console.log('plotly_selected');
   //   // var eventData = {points: selectedPoints};
   //   // myPlot.emit('plotly_selected', eventData);
@@ -174,34 +169,36 @@ var myPlot = document.getElementById('plot_div');
 
   myPlot.on('plotly_selected', function(eventData) {
 
-    console.log('plotly_selected.eventData',eventData);
+    console.log('plotly_selected',eventData);
     // console.log('eventData.points',eventData.points);
 
     selectedPoints = eventData.points;
-    
+
     var pointsFiltered = selectedPoints.map((item) => {
-      return { x: item.x, y: item.y ,color: item["marker.color"]}
+        console.log('item',item);
+        return { x: item.x, y: item.y ,color: item["marker.color"]}
     })
+
     // var myPlot_temp = document.getElementById('plot_div');
 
     // console.log('pointsFiltered: ',pointsFiltered);
-    
+
     var x = [];
     var y = [];
-    
-    var colors = [];
-    // for(var i = 0; i < trace1.x.entries; i++) colors.push(color1Light);    
-    
-    eventData.points.forEach(function(pt) {
-      x.push(pt.x);
-      y.push(pt.y);
-      colors[pt.pointNumber] = '#ff0000';
-    });
-    console.log('colors: ', colors.length);
-    console.log('colors: ',  eventData.points.length);
 
-    
-    Plotly.restyle(myPlot, 'marker.color', [colors], [0]);
+    var colors = [];
+    // for(var i = 0; i < trace1.x.entries; i++) colors.push(color1Light);
+
+//    eventData.points.forEach(function(pt) {
+//      x.push(pt.x);
+//      y.push(pt.y);
+//      colors[pt.pointNumber] = '#ff0000';
+//    });
+//    console.log('colors: ', colors.length);
+//    console.log('colors: ',  eventData.points.length);
+
+
+//    Plotly.restyle(myPlot, 'marker.color', [colors], [0]);
 
   });
 
@@ -215,7 +212,7 @@ var myPlot = document.getElementById('plot_div');
 //   	console.log("Nothing is selected, make all points at full opacity again");
 //   	$("#plot_div .select-outline").remove();
 //     Plotly.restyle('plot_div', data.marker, layout, config);
-    
+
 //   } else {
 //    	console.log("Dont remove selection box");
 //   }
@@ -225,19 +222,19 @@ var myPlot = document.getElementById('plot_div');
 
 
   // graphDiv.on('plotly_selected', function(eventData) {
-  
+
   //   var colors = [];
   //   for(var i = 0; i < N; i++) colors.push(color1Light);
-  
+
   //   console.log(eventData.points)
-  
+
   //   eventData.points.forEach(function(pt) {
   //     x.push(pt.x);
   //     y.push(pt.y);
   //     colors[pt.pointNumber] = color1;
   //   });
-  
-  
+
+
   //   Plotly.restyle(graphDiv, 'marker.color', [colors], [0]);
   // });
 
@@ -282,7 +279,7 @@ var myPlot = document.getElementById('plot_div');
 
 
 //   });
-  
+
 // var color1 = '#7b3294';
 // myPlot.on('plotly_selected', function(eventData) {
 //   var x = [];
@@ -314,7 +311,7 @@ $.get("/draw/data_request", (data1, status) => {
   trace1.x = data1.points.x;
   trace1.y = data1.points.y;
   trace1.marker.color = data1.points.color;
-  console.log(data1.points.color);
+//  console.log(data1.points.color);
   Plotly.react('plot_div', data, layout, config);
 });
 // var markerOldColors = trace1.marker.color;
@@ -325,15 +322,21 @@ var deselectButton = document.getElementById('deselectButton');
 
 deselectButton.addEventListener('click', function() {
   // Сбросьте выделение на графике
-  
+  $.get("/draw/data_request", (data1, status) => {
+  trace1.x = data1.points.x;
+  trace1.y = data1.points.y;
+  trace1.marker.color = data1.points.color;
+  //  console.log(data1.points.color);
+  Plotly.react('plot_div', data, layout, config);
+   });
   // layout['selectedpoints'] =  null;
-  layout['dragmode'] =  'box';
-  
-  Plotly.restyle(myPlot, data, layout, config);
-  Plotly.relayout(myPlot, {
-    'xaxis.autorange': true,
-    'yaxis.autorange': true
-  });
+//  layout['dragmode'] =  'box';
+//
+//  Plotly.restyle(myPlot, data, layout, config);
+//  Plotly.relayout(myPlot, {
+//    'xaxis.autorange': true,
+//    'yaxis.autorange': true
+//  });
 });
 
 });
