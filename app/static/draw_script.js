@@ -16,10 +16,9 @@ var trace1 = {
 
 var layout = {
   // title: 'Responsive to window\'s size!',
-  hovermode: 'closest',
-  font: {
-    size: 14
-  },
+  // font: {
+  //   size: 14
+  // },
   autosize: true,
   margin: {
     l: 45,
@@ -48,6 +47,7 @@ var layout = {
     showticklabels: true
   },
   uirevision: true,
+  hovermode: 'closest',
   dragmode: 'select',
   clickmode: 'event+select',
 
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 
-  
+
   $.get("/draw/data_request", (data1, status) => {
     trace1.x = data1.points.x;
     trace1.y = data1.points.y;
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
       trace1.x = data1.points.x;
       trace1.y = data1.points.y;
       trace1.marker.color = data1.points.color;
-      Plotly.restyle('plot_div', data, layout, config);
+      Plotly.react('plot_div', data, layout, config);
     });
 
   });
