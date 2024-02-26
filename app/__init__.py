@@ -13,9 +13,3 @@ migrate = Migrate(app, db)
 
 from app import routes, models, errors
 
-if __name__ == '__microblog__':
-    app.secret_key = 'super_secret_key'
-    app.debug = True
-    app.run(host='127.0.0.1', port=8000)
-
-
