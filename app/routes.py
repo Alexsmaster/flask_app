@@ -24,7 +24,7 @@ def add_new_dots():
 
 
 @app.route('/')
-@app.route('/draw', methods=['GET', 'POST'])
+@app.route('/draw')
 def draw():
     return render_template('draw_dots.html',  hostip='192.168.73.220')
 
