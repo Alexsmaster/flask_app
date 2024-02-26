@@ -4,7 +4,7 @@ from app.forms import AddDotsForm, DropDots
 from app.models import Dots, db
 
 
-import plotly.express as px
+#import plotly.express as px
 import random
 
 clicked_points = []
