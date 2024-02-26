@@ -79,7 +79,7 @@ var config = {
 
         $.ajax({
           type: "POST",
-          url: "http://192.168.88.221:5000/api/push_points_change_color", //localhost Flask
+          url: "/api/push_points_change_color", //localhost Flask
           data: JSON.stringify(pointsFiltered),
           contentType: "application/json",
         }).then(function() {
@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var myPlot = document.getElementById('plot_div');
 
+
   myPlot.on('plotly_selected', function(eventData) {
 
     console.log('plotly_selected', eventData);
@@ -130,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     $.ajax({
       type: "POST",
-      url: "http://192.168.88.221:5000/api/push_points_change_color", //localhost Flask
+      url: "/api/push_points_change_color", //localhost Flask
       data: JSON.stringify(pointsFiltered),
       contentType: "application/json",
     }).then(function() {
@@ -145,6 +146,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   });
 
+
+  
   $.get("/draw/data_request", (data1, status) => {
     trace1.x = data1.points.x;
     trace1.y = data1.points.y;
