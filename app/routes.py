@@ -19,6 +19,7 @@ def add_new_dots():
 
             db.session.add(point)
         db.session.commit()
+        db.session.close_all()
         return redirect(url_for('draw'))
     return render_template('create_dots.html',  title='Add', form=form)
 
@@ -54,8 +55,8 @@ def push_points_change_color():
     content = request.json
     print(content)
     for each in content:
-        Dots_temp = db.session.execute(db.select(Dots).filter_by(x = each['x'], y = each['y'])).scalar_one()
-        Dots_temp.color = '#0000FF'
+        Dots_temp = db.session.execute(db.select(Dots).filter_by(x = each['x'], y = each['y'])).scalar()
+        Dots_temp.color = each['color']
         # app.logger.info()
         app.logger.info(each['x'])
 
@@ -63,7 +64,8 @@ def push_points_change_color():
     # db.session.commit()
     # app.logger.warning('testing warning log')
     # app.logger.error('testing error log')
-    app.logger.info(content)
+    db.session.close_all()
+    # app.logger.info(content)
     return jsonify(content)
 
 

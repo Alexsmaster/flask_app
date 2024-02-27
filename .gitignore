@@ -38,3 +38,8 @@ nosetests.xml
 venv
 app.db
 microblog.log*
+draw_script copy.js
+draw_script copy 2.js
+boot.sh
+Dockerfile
+requirements.txt.bak
