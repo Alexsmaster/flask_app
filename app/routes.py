@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request, jsonify
 from app import app
 from app.forms import AddDotsForm, DropDots
 from app.models import Dots, db
-
+import timeit
 
 #import plotly.express as px
 import random
@@ -30,35 +30,41 @@ def draw():
     return render_template('draw_dots.html')
 
 
-@app.route('/draw/data_request', methods=['GET', 'POST'])
-def draw_data_request(): 
+@app.route('/draw/data_request', methods=['GET'])
+def draw_data_request():
+    start_timer = timeit.default_timer()
     points = Dots.query.all()
     data = {
         'x': [point.x for point in points],
         'y': [point.y for point in points],
         'color': [point.color for point in points]
     }
+    diff =  timeit.default_timer() - start_timer
+    app.logger.info(diff)
     return jsonify({'points': data})
 
 
-@app.route('/api/push_points', methods=['POST'])
-def push_points():
-    content = request.json
-    print(content)
-    # app.logger.warning('testing warning log')
-    # app.logger.error('testing error log')
-    app.logger.info(content)
-    return jsonify(content)
+# @app.route('/api/push_points', methods=['POST'])
+# def push_points():
+#     content = request.json
+#     print(content)
+#     # app.logger.warning('testing warning log')
+#     # app.logger.error('testing error log')
+#     app.logger.info(content)
+#     return jsonify(content)
 
 @app.route('/api/push_points_change_color', methods=['POST'])
 def push_points_change_color():
+    start_timer = timeit.default_timer()
     content = request.json
     print(content)
+
     for each in content:
         Dots_temp = db.session.execute(db.select(Dots).filter_by(x = each['x'], y = each['y'])).scalar()
         Dots_temp.color = each['color']
+
         # app.logger.info()
-        app.logger.info(each['x'])
+        # app.logger.info('%d %d %s', each['x'], each['y'], each['color'])
 
     db.session.commit()
     # db.session.commit()
@@ -66,6 +72,8 @@ def push_points_change_color():
     # app.logger.error('testing error log')
     db.session.close_all()
     # app.logger.info(content)
+    diff =  timeit.default_timer() - start_timer
+    app.logger.info(diff)
     return jsonify(content)
 
 
