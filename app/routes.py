@@ -76,7 +76,7 @@ def drop_dots():
         return redirect(url_for('draw'))
     return render_template('dropdb.html',  title='DropDB', form=form)
 
-@app.route('/plotly_python', methods=['GET', 'POST'])
-def test():
-    return render_template('dropdb.html')
-
+# @app.route('/plotly_python', methods=['GET', 'POST'])
+# def test():
+#     return render_template('dropdb.html')
+#

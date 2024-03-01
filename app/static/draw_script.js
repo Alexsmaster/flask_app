@@ -6,34 +6,8 @@ var colorToPush = "#FF0000";
 
 
 
-async function ask_server() {
-  const response = await fetch("/draw/data_request");
-  const data2 = await response.json();
-  trace1.x = data2.points.x;
-  trace1.y = data2.points.y;
-  trace1.marker.color = data2.points.color;
-   //, trace2,trace3
-//  alert("done");
-}
 
-async function postJSON(data) {
-  try {
-    const response = await fetch("https://example.com/profile", {
-      method: "POST", // or 'PUT'
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
 
-    const result = await response.json();
-    console.log("Success:", result);
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
-
-//postJSON(data);
 
 
 
@@ -151,7 +125,7 @@ var layout = {
   },
   uirevision: true,
   hovermode: 'closest',
-  dragmode: 'select',
+//  dragmode: 'select',
   clickmode: 'event+select',
 
 };
@@ -257,7 +231,44 @@ var config = {
 //var data = [trace1]; //, trace2,trace3
 var data = [trace1];
 
+
+async function ask_server() {
+  const response = await fetch("/draw/data_request");
+  const data2 = await response.json();
+  trace1.x = data2.points.x;
+  trace1.y = data2.points.y;
+  trace1.marker.color = data2.points.color;
+  Plotly.update('plot_div', data, layout, config);
+   //, trace2,trace3
+//  alert("done");
+}
+
+async function postJSON(data) {
+  try {
+    const response = await fetch("/api/push_points_change_color", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+//    console.log("Success:", result);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+
+
 ask_server();
+
+//requestAnimationFrame(() => {
+//    requestAnimationFrame(() => {
+//
+//    });
+//});
 
 Plotly.newPlot('plot_div', data, layout, config);
 
@@ -265,20 +276,40 @@ var myPlot = document.getElementById('plot_div');
 
 
 myPlot.on('plotly_selected', function(eventData) {
-  var start = performance.now();
   selectedPoints = eventData.points;
   var pointsFiltered = selectedPoints.map((item) => {
     return {
       x: item.x,
       y: item.y,
       color: colorToPush, //item["marker.color"],
+      pID: item.pointIndex
     }
   });
-  console.log('hit me bitch');
-  ask_server();
-  Plotly.react('plot_div', data, layout, config);
-  var end = performance.now();
-  var duration = end - start;
-  console.log(duration);
+
+  postJSON(pointsFiltered); //pushing selected items to server
+  const iterator = pointsFiltered.values();
+  for (const each of iterator) {
+    trace1.marker.color[each.pID] = colorToPush;
+  }
+  Plotly.update('plot_div', data, layout, config);
 });
 
+
+myPlot.on('plotly_click', function(eventData) {
+  selectedPoints = eventData.points;
+  var pointsFiltered = selectedPoints.map((item) => {
+    return {
+      x: item.x,
+      y: item.y,
+      color: colorToPush, //item["marker.color"],
+      pID: item.pointIndex
+    }
+  });
+
+  postJSON(pointsFiltered); //pushing selected items to server
+  const iterator = pointsFiltered.values();
+  for (const each of iterator) {
+    trace1.marker.color[each.pID] = colorToPush;
+  }
+  Plotly.update('plot_div', data, layout, config);
+});
