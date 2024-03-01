@@ -4,7 +4,7 @@ from app.forms import AddDotsForm, DropDots
 from app.models import Dots, db
 import timeit
 
-#import plotly.express as px
+import plotly.express as px
 import random
 
 clicked_points = []
@@ -40,7 +40,7 @@ def draw_data_request():
         'color': [point.color for point in points]
     }
     diff =  timeit.default_timer() - start_timer
-    app.logger.info(diff)
+    # app.logger.info(diff)
     return jsonify({'points': data})
 
 
@@ -57,26 +57,14 @@ def draw_data_request():
 def push_points_change_color():
     start_timer = timeit.default_timer()
     content = request.json
-    print(content)
-
     for each in content:
         Dots_temp = db.session.execute(db.select(Dots).filter_by(x = each['x'], y = each['y'])).scalar()
         Dots_temp.color = each['color']
-
-        # app.logger.info()
-        # app.logger.info('%d %d %s', each['x'], each['y'], each['color'])
-
     db.session.commit()
-    # db.session.commit()
-    # app.logger.warning('testing warning log')
-    # app.logger.error('testing error log')
-    db.session.close_all()
-    # app.logger.info(content)
-    diff =  timeit.default_timer() - start_timer
+    # db.session.close_all()
+    diff = timeit.default_timer() - start_timer
     app.logger.info(diff)
     return jsonify(content)
-
-
 
 
 @app.route('/drop_dots', methods=['GET', 'POST'])
@@ -87,4 +75,8 @@ def drop_dots():
         db.session.commit()
         return redirect(url_for('draw'))
     return render_template('dropdb.html',  title='DropDB', form=form)
+
+@app.route('/plotly_python', methods=['GET', 'POST'])
+def test():
+    return render_template('dropdb.html')
 

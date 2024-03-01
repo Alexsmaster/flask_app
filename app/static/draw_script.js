@@ -2,7 +2,41 @@
 
 var selectedPoints;
 
-var colorToPush = "#AF0000";
+var colorToPush = "#FF0000";
+
+
+
+async function ask_server() {
+  const response = await fetch("/draw/data_request");
+  const data2 = await response.json();
+  trace1.x = data2.points.x;
+  trace1.y = data2.points.y;
+  trace1.marker.color = data2.points.color;
+   //, trace2,trace3
+//  alert("done");
+}
+
+async function postJSON(data) {
+  try {
+    const response = await fetch("https://example.com/profile", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+    console.log("Success:", result);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+//postJSON(data);
+
+
+
 
 var iconCircleRed = {
   svg: [
@@ -92,7 +126,7 @@ var layout = {
   margin: {
     l: 45,
     r: 20,
-    b: 60,
+    b: 40,
     t: 30,
   },
   xaxis: {
@@ -167,7 +201,8 @@ var config = {
       title: 'Select as DarkGray',
       icon: iconCircleDarkGray,
       click: function() {
-        colorToPush = "#333333"
+        colorToPush = "#333333";
+
       }
     },
     {
@@ -206,7 +241,7 @@ var config = {
     //          contentType: "application/json",
     //        }).then(function() {
     //          $.get("/draw/data_request", (data1, status) => {
-    //            trace1.x = data1.points.x;
+    //            trace1.x = data1.points.x;Draw
     //            trace1.y = data1.points.y;
     //            trace1.marker.color = data1.points.color;
     //            //  console.log(data1.points.color);
@@ -219,50 +254,31 @@ var config = {
   ],
 };
 
-var data = [trace1]; //, trace2,trace3
+//var data = [trace1]; //, trace2,trace3
+var data = [trace1];
+
+ask_server();
 
 Plotly.newPlot('plot_div', data, layout, config);
 
 var myPlot = document.getElementById('plot_div');
 
+
 myPlot.on('plotly_selected', function(eventData) {
-
-
-  console.log('plotly_selected', eventData);
+  var start = performance.now();
   selectedPoints = eventData.points;
   var pointsFiltered = selectedPoints.map((item) => {
-    //      console.log('item', item);
     return {
       x: item.x,
       y: item.y,
       color: colorToPush, //item["marker.color"],
     }
   });
-  $.ajax({
-    type: "POST",
-    url: "/api/push_points_change_color", //localhost Flask
-    data: JSON.stringify(pointsFiltered),
-    contentType: "application/json",
-  }).then(function() {
-    $.get("/draw/data_request", (data1, status) => {
-      trace1.x = data1.points.x;
-      trace1.y = data1.points.y;
-      trace1.marker.color = data1.points.color;
-      Plotly.react('plot_div', data, layout, config);
-      eventData = [];
-    });
-  });
-});
-
-$.get("/draw/data_request", (data1, status) => {
-  var start = performance.now();
-
-  trace1.x = data1.points.x;
-  trace1.y = data1.points.y;
-  trace1.marker.color = data1.points.color;
-  //  console.log(data1.points.color);
+  console.log('hit me bitch');
+  ask_server();
   Plotly.react('plot_div', data, layout, config);
   var end = performance.now();
   var duration = end - start;
   console.log(duration);
 });
+
