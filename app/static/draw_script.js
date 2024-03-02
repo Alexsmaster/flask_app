@@ -79,12 +79,25 @@ var iconCircleDarkGray = {
 var trace1 = {
   x: [],
   y: [],
-  type: 'scatter',
+  type: 'scattergl',
   mode: 'markers',
   marker: {
     color: [],
-    size: 10
+    size: 10,
   }, //'rgba(250, 20, 130, 1)'
+  unselected: {
+    marker: {
+      opacity: 0.6,
+      size: 6,
+    }
+  },
+  selected: {
+    marker: {
+      // color: '#555555',
+      opacity: 1,
+      size: 10,
+    }
+  },
 
 };
 
@@ -94,6 +107,7 @@ var layout = {
   //   size: 14
   // },
   //  width: 320, height: 240,
+
   autosize: true,
   frameMargins: 0.1,
   autoexpand: true,
@@ -125,7 +139,7 @@ var layout = {
   },
   uirevision: true,
   hovermode: 'closest',
-//  dragmode: 'select',
+  dragmode: 'select',
   clickmode: 'event+select',
 
 };
@@ -137,6 +151,7 @@ var config = {
   displaylogo: false,
   scrollZoom: false,
   responsive: true,
+  
 
   //  modebar: {
   //    orientation: ‘h’,
@@ -188,47 +203,10 @@ var config = {
         colorToPush = "#FF0000"
       }
     },
-
-    //    {
-    //      name: 'download',
-    //      attr: 'download',
-    //      title: 'Download as Image',
-    //      icon: {
-    //        width: 10,
-    //        height: 10,
-    //        path: 'M 0 0 l 10 0 V 10 l -10 0 L 9 9 V 1 z M 1 1 L 8 2 L 8 8 L 1 9 L 1 8 L 7 7 L 7 3 L 1 2 L 1 1'
-    //      },
-    //      click: function() {
-    //        console.log(selectedPoints.keys());
-    //        const pointsFiltered = selectedPoints.map((item) => {
-    //          return {
-    //            x: item.x,
-    //            y: item.y
-    //          }
-    //        });
-    //        selectedPoints['marker.color'] = '#FFFF00';
-    //
-    //        $.ajax({
-    //          type: "POST",
-    //          url: "/api/push_points_change_color", //localhost Flask
-    //          data: JSON.stringify(pointsFiltered),
-    //          contentType: "application/json",
-    //        }).then(function() {
-    //          $.get("/draw/data_request", (data1, status) => {
-    //            trace1.x = data1.points.x;Draw
-    //            trace1.y = data1.points.y;
-    //            trace1.marker.color = data1.points.color;
-    //            //  console.log(data1.points.color);
-    //            Plotly.react('plot_div', data, layout, config);
-    //          });
-    //
-    //        });
-    //      }
-    //    }
   ],
 };
 
-//var data = [trace1]; //, trace2,trace3
+
 var data = [trace1];
 
 
@@ -239,8 +217,7 @@ async function ask_server() {
   trace1.y = data2.points.y;
   trace1.marker.color = data2.points.color;
   Plotly.update('plot_div', data, layout, config);
-   //, trace2,trace3
-//  alert("done");
+
 }
 
 async function postJSON(data) {

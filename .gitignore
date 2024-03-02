@@ -41,5 +41,5 @@ microblog.log*
 draw_script copy.js
 draw_script copy 2.js
 boot.sh
-Dockerfile
+# Dockerfile
 requirements.txt.bak
