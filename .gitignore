@@ -43,3 +43,19 @@ draw_script copy 2.js
 boot.sh
 # Dockerfile
 requirements.txt.bak
+
+
+.venv/
+
+*.pyc
+__pycache__/
+
+instance/
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+dist/
+build/
+*.egg-info/
