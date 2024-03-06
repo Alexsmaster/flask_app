@@ -13,13 +13,14 @@ clicked_points_color = {}
 @app.route('/add_new_dots', methods=['GET', 'POST'])
 def add_new_dots():
     form = AddDotsForm()
+    dotsObjects = []
     if form.validate_on_submit():
-        # for _ in range(int(form.numb.data)):
-        #     point = Dots(x=random.randint(0, 1000), y=random.randint(0, 1000), color = '#333333')
-        #
-        #     db.session.add(point)
-        #
-        db.session.add(point)
+        for _ in range(int(form.numb.data)):
+            # point.append(Dots(x=random.randint(0, 1000), y=random.randint(0, 1000), color = '#333333'))
+            dotsObjects.append({"x": random.randint(0, 1000), "y": random.randint(0, 1000), "color": '#333333'})
+        db.engine.execute(Dots.__table__.insert(), dotsObjects)
+        # db.session.add(point)
+        # db.session.add(Dots([{'x':160, 'y':259, 'color': "#333333"}]))
         db.session.commit()
         db.session.close_all()
         return redirect(url_for('draw'))
@@ -62,6 +63,7 @@ def push_points_change_color():
     for each in content:
         Dots_temp = db.session.execute(db.select(Dots).filter_by( id = each['pID']+1)).scalar()
         Dots_temp.color = each['color']
+        app.logger.info(each)
     db.session.commit()
     # db.session.close_all()
     diff = timeit.default_timer() - start_timer
