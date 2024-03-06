@@ -28,7 +28,7 @@ def add_new_dots():
 
 
 @app.route('/')
-@app.route('/draw')
+@app.route('/dra')
 def draw():
     return render_template('draw_dots.html')
 
