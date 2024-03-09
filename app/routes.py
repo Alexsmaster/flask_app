@@ -28,7 +28,7 @@ def add_new_dots():
 
 
 @app.route('/')
-@app.route('/dra')
+@app.route('/draw')
 def draw():
     return render_template('draw_dots.html')
 
@@ -63,7 +63,7 @@ def push_points_change_color():
     for each in content:
         Dots_temp = db.session.execute(db.select(Dots).filter_by( id = each['pID']+1)).scalar()
         Dots_temp.color = each['color']
-        app.logger.info(each)
+        # app.logger.info(each)
     db.session.commit()
     # db.session.close_all()
     diff = timeit.default_timer() - start_timer
@@ -84,3 +84,17 @@ def drop_dots():
 # def test():
 #     return render_template('dropdb.html')
 #
+
+@app.route('/api/1', methods=['GET'])
+def push_points_test():
+    start_timer = timeit.default_timer()
+
+    for each in range(10):
+        Dots_temp = db.session.execute(db.select(Dots).filter_by( id = each['pID']+1)).scalar()
+        Dots_temp.color = each['color']
+        # app.logger.info(each)
+    db.session.commit()
+    # db.session.close_all()
+    diff = timeit.default_timer() - start_timer
+    app.logger.info(diff)
+    return jsonify(content)

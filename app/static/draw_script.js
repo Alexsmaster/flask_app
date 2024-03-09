@@ -1,292 +1,137 @@
 "use strict";
 
-var selectedPoints;
-
-var colorToPush = "#FF0000";
-
-
-
-
-
-
-
-
-
-var iconCircleRed = {
-  svg: [
-    '<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 200 200\'>',
-    '<defs>',
-    ' <style>',
-    '  .cls-0{fill:#FF0000;}',
-    ' </style>',
-    '</defs>',
-    ' <title>Circles</title>',
-    ' <g id=\'symbol\'>',
-    '  <circle class=\'cls-0\' cx=\'100\' cy=\'100\' r=\'100\'/>',
-    ' </g>',
-    '</svg>'
-  ].join('')
-};
-
-var iconCircleGreen = {
-  svg: [
-    '<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 200 200\'>',
-    '<defs>',
-    ' <style>',
-    '  .cls-1{fill:#00FF00;}',
-    ' </style>',
-    '</defs>',
-    ' <title>Circles</title>',
-    ' <g id=\'symbol\'>',
-    '  <circle class=\'cls-1\' cx=\'100\' cy=\'100\' r=\'100\'/>',
-    ' </g>',
-    '</svg>'
-  ].join('')
-};
-
-var iconCircleBlue = {
-  svg: [
-    '<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 200 200\'>',
-    '<defs>',
-    ' <style>',
-    '  .cls-2{fill:#0000FF;}',
-    ' </style>',
-    '</defs>',
-    ' <title>Circles</title>',
-    ' <g id=\'symbol\'>',
-    '  <circle class=\'cls-2\' cx=\'100\' cy=\'100\' r=\'100\'/>',
-    ' </g>',
-    '</svg>'
-  ].join('')
-};
-
-var iconCircleDarkGray = {
-  svg: [
-    '<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 200 200\'>',
-    '<defs>',
-    ' <style>',
-    '  .cls-3{fill:#333333;}',
-    ' </style>',
-    '</defs>',
-    ' <title>Circles</title>',
-    ' <g id=\'symbol\'>',
-    '  <circle class=\'cls-3\' cx=\'100\' cy=\'100\' r=\'100\'/>',
-    ' </g>',
-    '</svg>'
-  ].join('')
-};
-
-var trace1 = {
-  x: [],
-  y: [],
-  type: 'scattergl',
-  mode: 'markers',
-  marker: {
-    color: [],
-    size: 10,
-  }, //'rgba(250, 20, 130, 1)'
-  unselected: {
-    marker: {
-      opacity: 0.6,
-      size: 6,
+async function getTraceData() {
+  let url = '/draw/data_request';
+    try {
+        let resp = await fetch(url);
+        console.log('comment: getTraceData >>>> fetch()');
+        // console.log(response.status); 
+        // console.log(response.statusText);
+        return await resp.json();
+    } catch (error) {
+        console.log('comment: getTraceData >>>> fetch()');
+        console.log(error);
     }
-  },
-  selected: {
-    marker: {
-      // color: '#555555',
-      opacity: 1,
-      size: 10,
-    }
-  },
-
-};
-
-var layout = {
-  // title: 'Responsive to window\'s size!',
-  // font: {
-  //   size: 14
-  // },
-  //  width: 320, height: 240,
-
-  autosize: true,
-  frameMargins: 0.1,
-  autoexpand: true,
-  margin: {
-    l: 45,
-    r: 20,
-    b: 40,
-    t: 30,
-  },
-  xaxis: {
-    automargin: true,
-    autorange: true,
-    showgrid: true,
-    zeroline: false,
-    showline: true,
-    autotick: true,
-    // ticks: '',
-    showticklabels: true
-  },
-  yaxis: {
-    automargin: true,
-    autorange: true,
-    showgrid: true,
-    zeroline: false,
-    showline: true,
-    autotick: true,
-    // ticks: '',
-    showticklabels: true
-  },
-  uirevision: true,
-  hovermode: 'closest',
-  dragmode: 'select',
-  clickmode: 'event+select',
-
-};
-
-var config = {
-  displayModeBar: true,
-  doubleClick: 'reset',
-  doubleClickDelay: 400,
-  displaylogo: false,
-  scrollZoom: false,
-  responsive: true,
-  
-
-  //  modebar: {
-  //    orientation: ‘h’,
-  //    bgcolor: ‘#ffffff’,
-  //    color:‘red’,
-  //    activecolor:‘red’,
-  //    position: ‘left’
-  //  },
-  modeBarButtonsToRemove: [], //'select2d', ,'lasso2d','pan2d','resetScale2d','zoomOut2d'
-  modeBarButtonsToAdd: [
-    'tooglehover',
-    'eraseshape',
-    'resetScale2d',
-
-    {
-      name: 'changeColorToGreen',
-      attr: 'changeColor',
-      title: 'Select as  Green',
-      icon: iconCircleGreen,
-      click: function() {
-        colorToPush = "#00FF00"
-      }
-    },
-    {
-      name: 'changeColorToBlue',
-      attr: 'changeColor',
-      title: 'Select as Blue',
-      icon: iconCircleBlue,
-      click: function() {
-        colorToPush = "#0000FF"
-      }
-    },
-    {
-      name: 'changeColorToDarkGray',
-      attr: 'changeColor',
-      title: 'Select as DarkGray',
-      icon: iconCircleDarkGray,
-      click: function() {
-        colorToPush = "#333333";
-
-      }
-    },
-    {
-      name: 'changeColorToRed',
-      attr: 'changeColor',
-      title: 'Select as Red',
-      icon: iconCircleRed,
-      click: function() {
-        colorToPush = "#FF0000"
-      }
-    },
-  ],
-};
-
-
-var data = [trace1];
-
-
-async function ask_server() {
-  const response = await fetch("/draw/data_request");
-  const data2 = await response.json();
-  trace1.x = data2.points.x;
-  trace1.y = data2.points.y;
-  trace1.marker.color = data2.points.color;
-  Plotly.update('plot_div', data, layout, config);
-
 }
 
 async function postJSON(data) {
+  let url = "/api/push_points_change_color";
   try {
-    const response = await fetch("/api/push_points_change_color", {
+    const response = await fetch(url, {
       method: "POST", // or 'PUT'
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(data),
     });
-
+    // Plotly.restyle('plot_div', {selectedpoints: [null]});
     const result = await response.json();
-//    console.log("Success:", result);
+    console.log("comment: postJSON >>>> fetch()", result);
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error: postJSON >>>> fetch():", error);
   }
 }
 
 
+async function myFunc() {
+  var selectedPoints;
 
-ask_server();
+  
 
-//requestAnimationFrame(() => {
-//    requestAnimationFrame(() => {
-//
-//    });
-//});
+  let data_trace = await getTraceData();
+  trace.x =            await data_trace.points.x;
+  trace.y =            await data_trace.points.y;
+  trace.marker.color = await data_trace.points.color;
 
-Plotly.newPlot('plot_div', data, layout, config);
+  var data = await [trace];
+  Plotly.newPlot('plot_div', data, layout, config);
 
+  console.log(layout);
+
+  //-----------------------------------------------------------
+  myPlot.on('plotly_selected', function(eventData) {
+    if(eventData == undefined || (eventData.points.length < 1)){
+      
+      console.log('plotly_selected - Nothing is selected');
+      // console.log("Nothing is selected, make all points at full opacity again");
+      $("#plotly_selected .select-outline").remove();
+      Plotly.restyle('plot_div', data.marker);
+
+    } else {
+
+      console.log('plotly_selected');
+      selectedPoints = eventData.points;
+      var pointsFiltered = selectedPoints.map((item) => {
+        return {
+          x: item.x,
+          y: item.y,
+          color: colorToPush, //item["marker.color"],
+          pID: item.pointIndex
+        }
+      });
+
+      postJSON(pointsFiltered); //pushing selected items to server
+      const iterator = pointsFiltered.values();
+      for (const each of iterator) {
+        trace.marker.color[each.pID] = colorToPush;
+      }
+      console.log(layout);
+      layout.datarevision =  layout.datarevision + 1;
+      console.log(eventData);
+      // eventData = null;
+      console.log(data);
+      // layout.selections = [null];
+      Plotly.update('plot_div', data, layout, config);
+      // Plotly.restyle('plot_div', {selectedpoints: [null]});
+      // Plotly.newPlot('plot_div', data, layout, config);
+      // Plotly.redraw('plot_div');
+      // Plotly.react('plot_div', data, layout, config);
+      console.log('plotly_selected_done');
+
+    }
+  });
+
+  //-----------------------------------------------------------
+
+  myPlot.on('plotly_click', function(eventData) {
+    console.log('plotly_click');
+
+    // selectedPoints = eventData.points;
+    // var pointsFiltered = selectedPoints.map((item) => {
+    //   return {
+    //     x: item.x,
+    //     y: item.y,
+    //     color: colorToPush, //item["marker.color"],
+    //     pID: item.pointIndex
+    //   }
+    // });
+    // // console.log('done');
+    // postJSON(pointsFiltered); //pushing selected items to server
+
+    // const iterator = pointsFiltered.values();
+    // for (const each of iterator) {
+    //   trace.marker.color[each.pID] = colorToPush;
+    // }
+    
+    // console.log(layout);
+    // layout.datarevision =  layout.datarevision + 1;
+    // console.log(eventData);
+
+    // Plotly.update('plot_div', data, layout, config);
+    // Plotly.restyle('plot_div', {selectedpoints: [null]});
+    // Plotly.reload('plot_div', data, layout, config);
+    // console.log('done');
+    console.log('plotly_click_done');
+  });
+
+  //-----------------------------------------------------------
+
+  myPlot.on('plotly_hover', function(data){
+
+    // Plotly.restyle('plot_div', data, update_layout);
+    console.log('plotly_hover');
+  });
+}
 var myPlot = document.getElementById('plot_div');
+myFunc();
 
 
-myPlot.on('plotly_selected', function(eventData) {
-  selectedPoints = eventData.points;
-  var pointsFiltered = selectedPoints.map((item) => {
-    return {
-      x: item.x,
-      y: item.y,
-      color: colorToPush, //item["marker.color"],
-      pID: item.pointIndex
-    }
-  });
 
-  postJSON(pointsFiltered); //pushing selected items to server
-  const iterator = pointsFiltered.values();
-  for (const each of iterator) {
-    trace1.marker.color[each.pID] = colorToPush;
-  }
-  Plotly.update('plot_div', data, layout, config);
-});
-
-
-myPlot.on('plotly_click', function(eventData) {
-  selectedPoints = eventData.points;
-  var pointsFiltered = selectedPoints.map((item) => {
-    return {
-      x: item.x,
-      y: item.y,
-      color: colorToPush, //item["marker.color"],
-      pID: item.pointIndex
-    }
-  });
-
-  postJSON(pointsFiltered); //pushing selected items to server
-  const iterator = pointsFiltered.values();
-  for (const each of iterator) {
-    trace1.marker.color[each.pID] = colorToPush;
-  }
-  Plotly.update('plot_div', data, layout, config);
-});

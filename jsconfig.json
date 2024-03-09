@@ -10,6 +10,6 @@
     },
     "exclude": [
         "node_modules",
-        "**/node_modules/*"
+        "**/plotly-2.29.1.min.js/*"
     ]
 }
